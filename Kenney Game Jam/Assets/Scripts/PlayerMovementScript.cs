@@ -7,17 +7,18 @@ public class PlayerMovementScript : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] float MoveSpeed;
-    [SerializeField] float MaxSpeed;
     [SerializeField] bool IsFacingRight;
     [SerializeField] float angleFromRight;
 
     [Header("References")]
     public BoxCollider2D BC;
+    public Rigidbody2D RB;
     
     // Start is called before the first frame update
     void Start()
     {
         BC = GetComponent<BoxCollider2D>();
+        RB = GetComponent<Rigidbody2D>();
 
         IsFacingRight = true;
         
@@ -26,16 +27,20 @@ public class PlayerMovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
         FaceMouse();
         TurnCheck();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
     }
 
     private void Move()
     {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector3 movement = input.normalized * MoveSpeed * Time.deltaTime;
-        transform.position += movement;
+        RB.velocity = movement;
     }
 
     private void FaceMouse()
