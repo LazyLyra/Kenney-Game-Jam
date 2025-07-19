@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class PlayerShootingScript : MonoBehaviour
 {
-    [Header("Direction")]
+    [Header("Shooting")]
     public Vector2 aimDirection;
     [SerializeField] float offset;
+    [SerializeField] float cooldown;
+    [SerializeField] float timer;
 
     [Header("References")]
     public GameObject bullet;
     // Start is called before the first frame update
     void Start()
     {
-
+        timer = 0f;
     }
 
     // Update is called once per frame
@@ -21,9 +23,12 @@ public class PlayerShootingScript : MonoBehaviour
     {
         GetDirection();
 
-        if (Input.GetMouseButtonDown(0))
+        timer += Time.deltaTime;
+
+        if (Input.GetMouseButtonDown(0) && timer > cooldown)
         {
             Fire();
+            timer = 0f;
         }
     }
 

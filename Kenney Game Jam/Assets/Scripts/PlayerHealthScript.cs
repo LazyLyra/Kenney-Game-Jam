@@ -24,7 +24,7 @@ public class PlayerHealthScript : MonoBehaviour
     {
         currentHealth -= damage;
 
-        if (currentHealth < 0)
+        if (currentHealth <= 0)
         {
             //die :(
         }

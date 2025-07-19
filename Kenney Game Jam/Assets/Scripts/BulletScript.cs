@@ -20,7 +20,7 @@ public class BulletScript : MonoBehaviour
         BC = GetComponent<BoxCollider2D>(); 
         PSS = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShootingScript>();
 
-        fireDirection = PSS.aimDirection;
+        fireDirection = PSS.aimDirection.normalized;
         timer = 0f;
     }
 

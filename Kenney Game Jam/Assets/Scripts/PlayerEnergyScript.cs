@@ -18,15 +18,28 @@ public class PlayerEnergyScript : MonoBehaviour
     void Update()
     {
         currentEnergy -= energyDecay * Time.deltaTime;
+
+        
     }
 
     public void UseEnergy(float usage)
     {
         currentEnergy -= usage;
+
+        if (currentEnergy <= 0)
+        {
+            //die
+        }
     }
 
     public void GainEnergy(float gain)
     {
         currentEnergy += gain;
+
+        if (currentEnergy > maxEnergy)
+        {
+            currentEnergy = maxEnergy;
+        }
+        
     }
 }
