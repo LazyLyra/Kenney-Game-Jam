@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: f8506a7940df00c4191fef67fdb37159
+  - enabled: 1
+    path: Assets/Scenes/DevDylan.unity
+    guid: 9811d5fe9dd5a4344bee9e66b4bca5a7
+  - enabled: 1
+    path: Assets/Scenes/DevKiriku.unity
+    guid: 14592c0e5ba77f443a9fd614251489d5
   m_configObjects: {}
