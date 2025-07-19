@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,21 +8,36 @@ public class GoToTarget : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] GameObject Target;
+    [SerializeField] GameObject Player;
+    private Pathfinding pathfinder;
 
     [Header("Variables")]
     public float moveSpeed = 5f;
     private List<PathNode> path;
     private int currentIndex = 0;
-    private bool isMoving = false;
-    private Pathfinding pathfinder;
-
+    [SerializeField]private bool isMoving = false;
+    [SerializeField]private bool attackingPlayer = false;
     [SerializeField] int gridWidth = 20;
     [SerializeField] int gridHeight = 40;
+    [SerializeField] float attackPlayerDist;
+    [SerializeField] private bool SwitchCheckReg = false;
 
+    private float DirDist;
+    private Vector2 Dir;
     private Vector3 bottomLeftWorldPos;
+    public event EventHandler OnSwitchTarget;
     private void Start()
     {
         pathfinder = new Pathfinding(35, 20);
+
+        //Initializing References
+        Player = GameObject.FindGameObjectWithTag("Player");
+        Target = GameObject.FindGameObjectWithTag("Target");
+
+        //listening to event
+        OnSwitchTarget += GoToTarget_OnSwitchTarget;
+        
+        /*
         bottomLeftWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, -Camera.main.transform.position.z));
         CreateGridVisual();
         pathfinder.GetGrid().GetXY(transform.position, out int startX, out int startY);
@@ -29,6 +45,9 @@ public class GoToTarget : MonoBehaviour
         Debug.Log(Target.transform.position);
         pathfinder.GetGrid().GetXY(Target.transform.position, out int x, out int y);
         Debug.Log(x + "," + y);
+        */
+        //Debug Visual
+
         for (int a = 16; a <= 19; a++)
         {
             for (int b = 4; b <= 15; b++)
@@ -39,9 +58,28 @@ public class GoToTarget : MonoBehaviour
                 Debug.DrawLine(pos + Vector3.up * 0.2f, pos + Vector3.down * 0.2f, Color.red, 100f);
             }
         }
-        SetPath(pathfinder.FindPath(startX, startY, x, y));
+
+        TargetPlayer();
+
+       
         
     }
+
+
+    private void GoToTarget_OnSwitchTarget(object sender, EventArgs e)
+    {
+        if (attackingPlayer)
+        {
+            TargetPlayer();
+            isMoving = path != null && path.Count > 0;
+        }
+        else 
+        {
+            TargetTower();
+            isMoving = path != null && path.Count > 0;
+        }
+    }
+
     public void SetPath(List<PathNode> PathToTarget)
     {
         path = PathToTarget;
@@ -58,6 +96,29 @@ public class GoToTarget : MonoBehaviour
 
     private void Update()
     {
+        Dir = Player.transform.position - transform.position;
+        DirDist = Dir.magnitude;
+
+        if (DirDist < attackPlayerDist)
+        {
+            attackingPlayer = true;
+            if (SwitchCheckReg != attackingPlayer)
+            {
+                SwitchCheckReg = true;
+                OnSwitchTarget?.Invoke(this, EventArgs.Empty);
+            }
+
+        }
+        else
+        {
+            attackingPlayer = false;
+            if (SwitchCheckReg != attackingPlayer)
+            {
+                SwitchCheckReg = false;
+                OnSwitchTarget?.Invoke(this, EventArgs.Empty);
+            }
+
+        }
         if (!isMoving || path == null || currentIndex >= path.Count) return;
 
         Vector3 cellBasePos = pathfinder.GetGrid().GetWorldPosition(path[currentIndex].x, path[currentIndex].y);
@@ -77,6 +138,20 @@ public class GoToTarget : MonoBehaviour
                 isMoving = false;
             }
         }
+    }
+
+    void TargetTower()
+    {
+        pathfinder.GetGrid().GetXY(transform.position, out int startX, out int startY);
+        pathfinder.GetGrid().GetXY(Target.transform.position, out int x, out int y);
+        SetPath(pathfinder.FindPath(startX, startY, x, y));
+    }
+
+    void TargetPlayer()
+    {
+        pathfinder.GetGrid().GetXY(transform.position, out int startX, out int startY);
+        pathfinder.GetGrid().GetXY(Player.transform.position, out int x, out int y);
+        SetPath(pathfinder.FindPath(startX, startY, x, y));
     }
     void CreateGridVisual()
     {
