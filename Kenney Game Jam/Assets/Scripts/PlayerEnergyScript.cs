@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerEnergyScript : MonoBehaviour
 {
     public float currentEnergy;
-    [SerializeField] float maxEnergy;
+    public float maxEnergy;
     [SerializeField] float energyDecay;
     
     // Start is called before the first frame update
@@ -18,8 +18,6 @@ public class PlayerEnergyScript : MonoBehaviour
     void Update()
     {
         currentEnergy -= energyDecay * Time.deltaTime;
-
-        
     }
 
     public void UseEnergy(float usage)

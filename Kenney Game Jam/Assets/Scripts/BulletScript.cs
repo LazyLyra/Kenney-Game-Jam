@@ -36,4 +36,12 @@ public class BulletScript : MonoBehaviour
         Vector3 movement = fireDirection * moveSpeed * Time.deltaTime;
         transform.position += movement;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            GameObject.Destroy(gameObject);
+        }
+    }
 }
