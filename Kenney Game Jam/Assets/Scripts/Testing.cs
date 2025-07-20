@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
+    /*
     private Pathfinding pathfinding;
 
     [Header("References")]
@@ -89,5 +90,5 @@ public class Testing : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
     }
-
+    */
 }

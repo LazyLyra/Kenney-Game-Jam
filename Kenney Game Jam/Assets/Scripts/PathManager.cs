@@ -6,8 +6,9 @@ using UnityEngine.Tilemaps;
 public class PathManager : MonoBehaviour
 {
     [Header("Grid Settings")]
-    [SerializeField] private int gridWidth = 70;
-    [SerializeField] private int gridHeight = 70;
+    [SerializeField] private int gridWidth = 40;
+    [SerializeField] private int gridHeight = 40;
+    [SerializeField] private float cellSize = 1f;
     [SerializeField] private Vector3 gridOrigin = new Vector3(-19, -19, 0);
     [SerializeField] private Vector2Int[] blockedCells;
     [SerializeField] private Tilemap buildingTilemap;
@@ -21,7 +22,7 @@ public class PathManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        pathfinder = new Pathfinding(gridWidth, gridHeight);
+        pathfinder = new Pathfinding(gridWidth, gridHeight, cellSize);
         var grid = pathfinder.GetGrid();
         var bounds = buildingTilemap.cellBounds;
         Vector3 exception = new Vector3(-1.47f, -1.55f, 0);
@@ -52,15 +53,34 @@ public class PathManager : MonoBehaviour
     {
         var grid = pathfinder.GetGrid();
         grid.GetXY(stationPos, out int tx, out int ty);
-
-        // Pick a spawn position (like Vector3.zero or an entrance point)
         grid.GetXY(new Vector3(0, 0), out int sx, out int sy);
 
         StationPath = pathfinder.FindPath(sx, sy, tx, ty);
     }
     private void Start()
     {
-        //DebugDrawUnwalkable();
+        DebugDrawUnwalkable();
+        DebugDrawFullGrid();
+    }
+    private void DebugDrawFullGrid()
+    {
+        var grid = pathfinder.GetGrid();
+        float cs = grid.GetCellSize();
+
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++)
+            {
+                Vector3 worldPos = grid.GetWorldPosition(x, y) + new Vector3(cs, cs) * 1f;
+                var node = grid.GetGridObject(x, y);
+                Color color = node.isWalkable ? Color.green : Color.red;
+
+                Debug.DrawLine(worldPos + new Vector3(-cs / 2f, -cs / 2f), worldPos + new Vector3(-cs / 2f, cs / 2f), color, 100f);
+                Debug.DrawLine(worldPos + new Vector3(-cs / 2f, cs / 2f), worldPos + new Vector3(cs / 2f, cs / 2f), color, 100f);
+                Debug.DrawLine(worldPos + new Vector3(cs / 2f, cs / 2f), worldPos + new Vector3(cs / 2f, -cs / 2f), color, 100f);
+                Debug.DrawLine(worldPos + new Vector3(cs / 2f, -cs / 2f), worldPos + new Vector3(-cs / 2f, -cs / 2f), color, 100f);
+            }
+        }
     }
     public void DebugDrawUnwalkable()
     {
@@ -73,7 +93,7 @@ public class PathManager : MonoBehaviour
                 var node = grid.GetGridObject(x, y);
                 if (!node.isWalkable)
                 { 
-                    Vector3 worldPos = grid.GetWorldPosition(x, y) + Vector3.one * cs * 0.8f;
+                    Vector3 worldPos = grid.GetWorldPosition(x, y) + Vector3.one * cs * 1f;
                     float s = cs * 0.5f;
                     Debug.DrawLine(worldPos + Vector3.up * s + Vector3.left * s,
                                    worldPos + Vector3.down * s + Vector3.right * s,

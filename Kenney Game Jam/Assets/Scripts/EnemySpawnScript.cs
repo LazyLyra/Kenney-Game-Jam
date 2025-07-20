@@ -8,6 +8,7 @@ public class EnemySpawnScript : MonoBehaviour
 {
     [Header("Enemy Prefab & Skins")]
     [SerializeField] private List<Sprite> enemySkins;
+    [SerializeField] private RuntimeAnimatorController[] skinAnims;
     [SerializeField] private GameObject enemyWeakPrefab;
     [SerializeField] private GameObject station;
 
@@ -69,10 +70,16 @@ public class EnemySpawnScript : MonoBehaviour
                 GameObject go = Instantiate(enemyWeakPrefab, spawnPos, Quaternion.identity);
                 if (enemySkins != null && enemySkins.Count > 0)
                 {
+                    int maxIndex = Mathf.Min(enemySkins.Count, skinAnims.Length);
+
                     SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                    Animator animator = go.GetComponent<Animator>();
+                    int index = UnityEngine.Random.Range(0, maxIndex);
                     if (sr != null)
                     {
-                        sr.sprite = enemySkins[UnityEngine.Random.Range(0, enemySkins.Count)];
+                        sr.sprite = enemySkins[index];
+                        animator.runtimeAnimatorController = skinAnims[index];
+                        animator.Play("Walk");
                     }
                 }
             }

@@ -139,10 +139,22 @@ MonoBehaviour:
   - {fileID: -1269461777, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
   - {fileID: 1840881836, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
   - {fileID: -1996787721, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
-  - {fileID: -1996787721, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
   - {fileID: 788720768, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
   - {fileID: 752469474, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
   - {fileID: 954460762, guid: 7e0392c1223edff47aec27dbb9a100d7, type: 3}
+  skinAnims:
+  - {fileID: 9100000, guid: 71ea7d6373d2d2144ae349fc08401ddb, type: 2}
+  - {fileID: 9100000, guid: cbfeef92445c7234eb20a56109f0b481, type: 2}
+  - {fileID: 9100000, guid: de8162183c2c2d043956e8271d700a35, type: 2}
+  - {fileID: 9100000, guid: 7ba03b55a39c53d44b295d31a5aec06a, type: 2}
+  - {fileID: 9100000, guid: 3ee105fa6d8a5564cb95756ec602d85b, type: 2}
+  - {fileID: 9100000, guid: a1dd97142e2908142aefea019e06c7a3, type: 2}
+  - {fileID: 9100000, guid: f95908ff44b900c4297462398039d356, type: 2}
+  - {fileID: 9100000, guid: 6cc3379ca1aa06d4a836d2f7318107a0, type: 2}
+  - {fileID: 9100000, guid: aa4b4a16c3619fb4b958256830041f95, type: 2}
+  - {fileID: 9100000, guid: d26b7840c4d3c454c818677dce767a7f, type: 2}
+  - {fileID: 9100000, guid: 5ab6e3d9f16bbed47965f725e4bc7aaa, type: 2}
+  - {fileID: 9100000, guid: c29976499cedb9648b2830662414e0a4, type: 2}
   enemyWeakPrefab: {fileID: 795490880681524944, guid: 8db93099b250bcc41afb45e2c134367b, type: 3}
   station: {fileID: 0}
   WaveCounter: 1
