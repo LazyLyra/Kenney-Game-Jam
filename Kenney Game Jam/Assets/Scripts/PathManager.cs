@@ -59,8 +59,8 @@ public class PathManager : MonoBehaviour
     }
     private void Start()
     {
-        DebugDrawUnwalkable();
-        DebugDrawFullGrid();
+        //DebugDrawUnwalkable();
+        //DebugDrawFullGrid();
     }
     private void DebugDrawFullGrid()
     {
