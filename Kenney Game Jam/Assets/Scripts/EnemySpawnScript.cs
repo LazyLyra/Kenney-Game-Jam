@@ -1,57 +1,89 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 
 public class EnemySpawnScript : MonoBehaviour
 {
-    [Header("Variables")]
-    [SerializeField] public int WaveCounter = 1;
-    [SerializeField] public bool WaveOver;
-    [SerializeField] private float rateIncreasePerWave;
-    [SerializeField] private float baseSpawnRate;
-    [SerializeField] private float XtratimeGivenPerRound = 2f;
+    [Header("Enemy Prefab & Skins")]
+    [SerializeField] private List<Sprite> enemySkins;
+    [SerializeField] private GameObject enemyWeakPrefab;
+    [SerializeField] private GameObject station;
 
-    private event EventHandler TimeToSpawn;
-    private float currentSpawnRate = 0;
-    private GameObject enemyWeak;
+    [Header("Wave Settings")]
+    [SerializeField] private int WaveCounter = 1;
+    [SerializeField] private float GrowthFactor = 3f;
+    [SerializeField] private float baseSpawnRate = 0.5f;   
+    [SerializeField] private float baseTimePerRound = 20f;
+
+    [Header("Spawner Settings")]
+    [SerializeField] private int MyIndex;
+
+    private float WaveTimer;
+    private float Timer;
+    private bool WaveOver = false;
+
     private void Start()
     {
-        enemyWeak = GameObject.FindGameObjectWithTag("WeakEnemy");
-        TimeToSpawn += EnemySpawnScript_TimeToSpawn;
-
-        TimeToSpawn?.Invoke(this, EventArgs.Empty);
+        WaveTimer = baseTimePerRound;
+        station = GameObject.FindGameObjectWithTag("Station");
+        BeginWave();
     }
 
     private void Update()
     {
-
-
-        if (WaveOver) {
-            TimeToSpawn?.Invoke(this, EventArgs.Empty);
-        }
-
-    }
-    private void EnemySpawnScript_TimeToSpawn(object sender, EventArgs e)
-    {
-        enemyInstantiator(enemyWeak);
-        WaveOver = false;
-        WaveCounter += 1;
-    }
-
-    private float SpawnRateCalculator(int WaveCounter)
-    {
-        return baseSpawnRate * Mathf.Pow(rateIncreasePerWave, WaveCounter - 1);
-    }
-
-    private void enemyInstantiator(GameObject enemy)
-    {
-        currentSpawnRate = SpawnRateCalculator(WaveCounter);
-        for (float timer = 0; timer< 5; timer += Time.deltaTime)
+        Timer += Time.deltaTime;
+        bool noEnemiesLeft = GameObject.FindGameObjectsWithTag("Enemy").Length == 0;
+        if (noEnemiesLeft || Timer >= WaveTimer)
         {
-            Instantiate(enemy);
+            Timer = 0f;
+            WaveTimer += 5f;
+            WaveOver = true;
+            BeginWave();
         }
     }
 
+    private void BeginWave()
+    {
+        if (!WaveOver && WaveCounter > 1) return;
+        WaveOver = false;
+        PathManager.Instance.ComputeStationPath(station.transform.position);
+        StartCoroutine(SpawnWaveCoroutine());
+    }
+
+    private IEnumerator SpawnWaveCoroutine()
+    {
+        float currentSpawnRate = baseSpawnRate + GrowthFactor * (WaveCounter-1);
+        int spawnAttempts = Mathf.CeilToInt(currentSpawnRate * 5f);
+
+        float delay = currentSpawnRate > 0 ? 1f / currentSpawnRate : 0.5f;
+        delay = Mathf.Clamp(delay, 0.1f, 1f);
+
+        for (int i = 0; i < spawnAttempts; i++)
+        {
+            int spawnerIndex = UnityEngine.Random.Range(0, 4);
+            if (MyIndex == spawnerIndex)
+            {
+                Vector3 spawnPos = GetRandomSpawnPosition();
+                GameObject go = Instantiate(enemyWeakPrefab, spawnPos, Quaternion.identity);
+                if (enemySkins != null && enemySkins.Count > 0)
+                {
+                    SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                    {
+                        sr.sprite = enemySkins[UnityEngine.Random.Range(0, enemySkins.Count)];
+                    }
+                }
+            }
+            yield return new WaitForSeconds(delay);
+        }
+
+        WaveCounter++;
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        return transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 2f;
+    }
 }

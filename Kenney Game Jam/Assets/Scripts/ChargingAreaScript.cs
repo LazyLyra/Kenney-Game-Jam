@@ -14,7 +14,6 @@ public class ChargingAreaScript : MonoBehaviour
 
     [SerializeField] float beamCD;
     [SerializeField] float beamTimer;
-
     public float currentHP;
     public float maxHP;
     // Start is called before the first frame update
@@ -23,9 +22,11 @@ public class ChargingAreaScript : MonoBehaviour
         PES = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerEnergyScript>();
         CC = GetComponent<CircleCollider2D>();
 
+
         timer = 0f;
         beamTimer = 0f;
         currentHP = maxHP;
+
     }
 
     // Update is called once per frame

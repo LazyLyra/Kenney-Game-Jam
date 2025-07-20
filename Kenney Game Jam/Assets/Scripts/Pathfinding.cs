@@ -10,12 +10,12 @@ public class Pathfinding
 {
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
-    public float cellSize = 0.5f;
+    public float cellSize = 0.8f;
 
     private Grid<PathNode> grid;
     private List<PathNode> openList;
     private List<PathNode> closedList;
-    Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+    Vector3 GridOrigin = new Vector3(-19, -19, 0);
 
     public Pathfinding(int width, int height)
     {
@@ -24,7 +24,7 @@ public class Pathfinding
             width,
             height,
             cellSize,
-            bottomLeft,
+            GridOrigin,
             //instantiates generic class of PathNode object
             (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y)
         );

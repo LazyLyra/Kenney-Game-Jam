@@ -27,7 +27,7 @@ public class EnemyHP : MonoBehaviour
     }
     void Death()
     {
-
+        GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
