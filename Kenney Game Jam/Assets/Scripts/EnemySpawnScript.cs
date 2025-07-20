@@ -13,7 +13,7 @@ public class EnemySpawnScript : MonoBehaviour
     [SerializeField] private GameObject station;
 
     [Header("Wave Settings")]
-    [SerializeField] public int WaveCounter = 1;
+    [SerializeField] public int WaveCounter = 0;
     [SerializeField] private float GrowthFactor = 1.5f;
     [SerializeField] private float baseSpawnRate = 0.2f;   
     [SerializeField] private float baseTimePerRound = 20f;
@@ -49,6 +49,7 @@ public class EnemySpawnScript : MonoBehaviour
     {
         if (!WaveOver && WaveCounter > 1) return;
         WaveOver = false;
+        WaveCounter++;
         PathManager.Instance.ComputeStationPath(station.transform.position);
         StartCoroutine(SpawnWaveCoroutine());
     }
@@ -88,7 +89,6 @@ public class EnemySpawnScript : MonoBehaviour
             yield return new WaitForSeconds(delay);
         }
 
-        WaveCounter++;
     }
 
 

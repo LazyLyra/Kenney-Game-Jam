@@ -157,7 +157,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: c29976499cedb9648b2830662414e0a4, type: 2}
   enemyWeakPrefab: {fileID: 795490880681524944, guid: 8db93099b250bcc41afb45e2c134367b, type: 3}
   station: {fileID: 0}
-  WaveCounter: 1
+  WaveCounter: 0
   GrowthFactor: 1.5
   baseSpawnRate: 0.2
   baseTimePerRound: 20
