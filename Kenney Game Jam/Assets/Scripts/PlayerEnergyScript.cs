@@ -7,22 +7,36 @@ public class PlayerEnergyScript : MonoBehaviour
     public float currentEnergy;
     public float maxEnergy;
     [SerializeField] float energyDecay;
+
+    public PlayerSFXManager sfx;
     
     // Start is called before the first frame update
     void Start()
     {
+        sfx = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSFXManager>();
+
         currentEnergy = maxEnergy;
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentEnergy -= energyDecay * Time.deltaTime;
+        Decay();
     }
 
     public void UseEnergy(float usage)
     {
         currentEnergy -= usage;
+
+        if (currentEnergy <= 0)
+        {
+            //die
+        }
+    }
+
+    public void Decay()
+    {
+        currentEnergy -= energyDecay * Time.deltaTime;
 
         if (currentEnergy <= 0)
         {
@@ -38,6 +52,8 @@ public class PlayerEnergyScript : MonoBehaviour
         {
             currentEnergy = maxEnergy;
         }
+
+        sfx.PlaySound(1);
         
     }
 }

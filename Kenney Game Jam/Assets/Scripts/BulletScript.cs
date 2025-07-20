@@ -12,17 +12,22 @@ public class BulletScript : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     public BoxCollider2D BC;
-    public PlayerShootingScript PSS;
+  
 
     // Start is called before the first frame update
     void Start()
     {
         BC = GetComponent<BoxCollider2D>(); 
-        PSS = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShootingScript>();
+        
 
-        fireDirection = PSS.aimDirection.normalized;
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        fireDirection = new Vector2(mousePosition.x - transform.position.x, mousePosition.y - transform.position.y);
+        fireDirection = fireDirection.normalized;
         timer = 0f;
     }
+
+
 
     // Update is called once per frame
     void Update()
