@@ -11,6 +11,7 @@ TagManager:
   - GridOrigin
   - Bombing
   - BombColliders
+  - Spawner
   layers:
   - Default
   - TransparentFX

@@ -13,9 +13,9 @@ public class EnemySpawnScript : MonoBehaviour
     [SerializeField] private GameObject station;
 
     [Header("Wave Settings")]
-    [SerializeField] private int WaveCounter = 1;
-    [SerializeField] private float GrowthFactor = 3f;
-    [SerializeField] private float baseSpawnRate = 0.5f;   
+    [SerializeField] public int WaveCounter = 1;
+    [SerializeField] private float GrowthFactor = 1.5f;
+    [SerializeField] private float baseSpawnRate = 0.2f;   
     [SerializeField] private float baseTimePerRound = 20f;
 
     [Header("Spawner Settings")]
@@ -28,7 +28,7 @@ public class EnemySpawnScript : MonoBehaviour
     private void Start()
     {
         WaveTimer = baseTimePerRound;
-        station = GameObject.FindGameObjectWithTag("Station");
+        station = GameObject.FindGameObjectWithTag("Station");  
         BeginWave();
     }
 
@@ -55,11 +55,14 @@ public class EnemySpawnScript : MonoBehaviour
 
     private IEnumerator SpawnWaveCoroutine()
     {
-        float currentSpawnRate = baseSpawnRate + GrowthFactor * (WaveCounter-1);
+        float currentSpawnRate = baseSpawnRate + GrowthFactor * (WaveCounter - 1);
         int spawnAttempts = Mathf.CeilToInt(currentSpawnRate * 5f);
+        spawnAttempts = Mathf.Min(spawnAttempts, 20);
 
-        float delay = currentSpawnRate > 0 ? 1f / currentSpawnRate : 0.5f;
-        delay = Mathf.Clamp(delay, 0.1f, 1f);
+        float delay = currentSpawnRate > 0
+            ? 1f / currentSpawnRate
+            : 2f;
+        delay = Mathf.Clamp(delay, 1f, 2f);
 
         for (int i = 0; i < spawnAttempts; i++)
         {
@@ -71,7 +74,6 @@ public class EnemySpawnScript : MonoBehaviour
                 if (enemySkins != null && enemySkins.Count > 0)
                 {
                     int maxIndex = Mathf.Min(enemySkins.Count, skinAnims.Length);
-
                     SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
                     Animator animator = go.GetComponent<Animator>();
                     int index = UnityEngine.Random.Range(0, maxIndex);
@@ -88,6 +90,7 @@ public class EnemySpawnScript : MonoBehaviour
 
         WaveCounter++;
     }
+
 
     private Vector3 GetRandomSpawnPosition()
     {

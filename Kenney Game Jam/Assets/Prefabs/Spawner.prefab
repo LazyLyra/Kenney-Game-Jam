@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5179907406858144827}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   enemyWeakPrefab: {fileID: 795490880681524944, guid: 8db93099b250bcc41afb45e2c134367b, type: 3}
   station: {fileID: 0}
   WaveCounter: 1
-  GrowthFactor: 2
+  GrowthFactor: 1.5
   baseSpawnRate: 0.2
   baseTimePerRound: 20
   MyIndex: 0

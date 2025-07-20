@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAttackScript : MonoBehaviour
@@ -12,14 +13,18 @@ public class EnemyAttackScript : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private GameObject station;
+    [SerializeField] private GameObject player;
     [SerializeField] private ChargingAreaScript chargingAreaScript;
+    [SerializeField] private PlayerHealthScript playerHealthScript;
 
     private bool isAttacking = false;
 
     private void Start()
     {
         station = GameObject.FindGameObjectWithTag("Station");
-        chargingAreaScript = GameObject.FindGameObjectWithTag("Station").GetComponent<ChargingAreaScript>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        chargingAreaScript = station.GetComponent<ChargingAreaScript>();
+        playerHealthScript = player.GetComponent<PlayerHealthScript>();
 
         timer = 0f;
     }
@@ -29,17 +34,31 @@ public class EnemyAttackScript : MonoBehaviour
         
         if (station == null) return;
 
-        float distance = Vector3.Distance(transform.position, station.transform.position);
-        if (distance <= attackRange && !isAttacking && timer > attackCD)
+        float distanceStation = Vector3.Distance(transform.position, station.transform.position);
+        if (distanceStation <= attackRange && !isAttacking && timer > attackCD)
         {
-            Attack();
+            Attack("Station");
+            timer = 0f;
+        }
+
+        if(player ==null) return;
+        float playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        if (playerDistance <= attackRange && !isAttacking && timer > attackCD)
+        {
+            Attack("Player");
             timer = 0f;
         }
     }
 
-    void Attack()
+    void Attack(string name)
     {
-        chargingAreaScript.TakeDamage(EnemyDamage);
+        if (name == "Station")
+        {
+            chargingAreaScript.TakeDamage(EnemyDamage);
+        }else if(name == "Player")
+        {
+            playerHealthScript.TakeDamage(EnemyDamage);
+        }
     }
 
 }

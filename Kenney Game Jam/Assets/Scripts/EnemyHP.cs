@@ -44,7 +44,6 @@ public class EnemyHP : MonoBehaviour
     {
         if (other.CompareTag("Bullet") || other.CompareTag("BombColliders"))
         {
-            Debug.Log("ran in");
             TakeDamage(damage); 
         }
        
