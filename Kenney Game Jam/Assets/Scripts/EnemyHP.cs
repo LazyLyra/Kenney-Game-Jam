@@ -12,11 +12,12 @@ public class EnemyHP : MonoBehaviour
     [Header("References")]
     private int tempholder;
     public PlayerShootingScript PSS;
+    public CircleCollider2D CC;
 
     void Start()
     {
         CurrentHP = MaxHP;
-
+        CC = GetComponent<CircleCollider2D>();
         PSS = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShootingScript>();
     }
 
@@ -41,18 +42,12 @@ public class EnemyHP : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Bullet"))
+        if (other.CompareTag("Bullet") || other.CompareTag("BombColliders"))
         {
             Debug.Log("ran in");
-            TakeDamage(damage);
-
-            
+            TakeDamage(damage); 
         }
-
-        if (other.CompareTag("BombColliders"))
-        {
-            TakeDamage(30);
-        }
+       
     }
 
 }

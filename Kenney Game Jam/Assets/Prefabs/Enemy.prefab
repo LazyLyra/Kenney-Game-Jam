@@ -118,7 +118,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -156,6 +156,8 @@ MonoBehaviour:
   MaxHP: 30
   CurrentHP: 0
   damage: 10
+  PSS: {fileID: 0}
+  CC: {fileID: 0}
 --- !u!114 &-1374454418072745847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +173,7 @@ MonoBehaviour:
   EnemyDamage: 2
   attackCD: 5
   attackRange: 2
+  timer: 0
   station: {fileID: 0}
   chargingAreaScript: {fileID: 0}
 --- !u!95 &7544352648681197842
