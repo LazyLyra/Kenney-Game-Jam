@@ -9,6 +9,8 @@ TagManager:
   - Station
   - Target
   - GridOrigin
+  - Bombing
+  - BombColliders
   layers:
   - Default
   - TransparentFX

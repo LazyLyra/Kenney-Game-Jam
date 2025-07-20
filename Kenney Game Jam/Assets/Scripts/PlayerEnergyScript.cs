@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerEnergyScript : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class PlayerEnergyScript : MonoBehaviour
         if (currentEnergy <= 0)
         {
             //die
+            StartCoroutine(Die());
         }
     }
 
@@ -41,6 +43,7 @@ public class PlayerEnergyScript : MonoBehaviour
         if (currentEnergy <= 0)
         {
             //die
+            StartCoroutine(Die());
         }
     }
 
@@ -55,5 +58,12 @@ public class PlayerEnergyScript : MonoBehaviour
 
         sfx.PlaySound(1);
         
+    }
+
+    private IEnumerator Die()
+    {
+        sfx.PlaySound(4);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(5);
     }
 }

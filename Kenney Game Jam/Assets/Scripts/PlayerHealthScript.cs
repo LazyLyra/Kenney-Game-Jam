@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealthScript : MonoBehaviour
 {
@@ -47,12 +48,13 @@ public class PlayerHealthScript : MonoBehaviour
         {
             currentHealth -= damage;
         }
-        
-        
+
+        sfx.PlaySound(3);
 
         if (currentHealth <= 0)
         {
             //die :(
+            StartCoroutine(Die());
         }
     }
 
@@ -70,5 +72,12 @@ public class PlayerHealthScript : MonoBehaviour
         Shielded = true;
 
         sfx.PlaySound(2);
+    }
+
+    private IEnumerator Die()
+    {
+        sfx.PlaySound(4);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(5);
     }
 }

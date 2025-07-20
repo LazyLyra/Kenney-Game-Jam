@@ -47,7 +47,7 @@ public class BuffSpawner : MonoBehaviour
             }
             else
             {
-                //ToSpawn = bombing;
+                ToSpawn = bombing;
             }
 
             Instantiate(ToSpawn, pos, Quaternion.Euler(0,0,0));

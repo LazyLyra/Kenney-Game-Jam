@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChargingAreaScript : MonoBehaviour
 {
     public PlayerEnergyScript PES;
     public CircleCollider2D CC;
     public GameObject Beam;
+    public PlayerSFXManager sfx;
     [SerializeField] float cooldownTime;
     [SerializeField] float timer;
     [SerializeField] float energyGain;
@@ -21,7 +23,7 @@ public class ChargingAreaScript : MonoBehaviour
     {
         PES = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerEnergyScript>();
         CC = GetComponent<CircleCollider2D>();
-
+        sfx = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSFXManager>();
 
         timer = 0f;
         beamTimer = 0f;
@@ -56,5 +58,18 @@ public class ChargingAreaScript : MonoBehaviour
         currentHP = -damage;
 
         Mathf.Clamp(currentHP, 0, maxHP);
+
+        if (currentHP <= 0)
+        {
+            //die
+            StartCoroutine(Die());
+        }
+    }
+
+    private IEnumerator Die()
+    {
+        sfx.PlaySound(4);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(5);
     }
 }
