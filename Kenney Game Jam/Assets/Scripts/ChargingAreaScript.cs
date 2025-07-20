@@ -55,7 +55,7 @@ public class ChargingAreaScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        currentHP = -damage;
+        currentHP -= damage;
 
         Mathf.Clamp(currentHP, 0, maxHP);
 

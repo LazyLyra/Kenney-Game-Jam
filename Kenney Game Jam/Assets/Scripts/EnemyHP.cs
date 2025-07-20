@@ -11,15 +11,25 @@ public class EnemyHP : MonoBehaviour
     // Start is called before the first frame update
     [Header("References")]
     private int tempholder;
+    public PlayerShootingScript PSS;
 
     void Start()
     {
         CurrentHP = MaxHP;
+
+        PSS = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShootingScript>();
     }
 
     public void TakeDamage(float damage)
     {
-        CurrentHP -= damage;
+        if (PSS.Buffed)
+        {
+            CurrentHP -= 1.5f * damage;
+        }
+        else
+        {
+            CurrentHP -= damage;
+        }
         if (CurrentHP <= 0)
         {
             Death();
@@ -35,6 +45,14 @@ public class EnemyHP : MonoBehaviour
         {
             Debug.Log("ran in");
             TakeDamage(damage);
+
+            
+        }
+
+        if (other.CompareTag("BombColliders"))
+        {
+            TakeDamage(30);
         }
     }
+
 }

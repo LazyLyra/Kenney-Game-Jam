@@ -8,12 +8,11 @@ public class EnemyAttackScript : MonoBehaviour
     [SerializeField] public float EnemyDamage = 2f;
     [SerializeField] private float attackCD = 5f;
     [SerializeField] private float attackRange = 2f;
+    [SerializeField] float timer;
 
     [Header("References")]
     [SerializeField] private GameObject station;
     [SerializeField] private ChargingAreaScript chargingAreaScript;
-
-    public event EventHandler OnAttack;
 
     private bool isAttacking = false;
 
@@ -21,28 +20,26 @@ public class EnemyAttackScript : MonoBehaviour
     {
         station = GameObject.FindGameObjectWithTag("Station");
         chargingAreaScript = GameObject.FindGameObjectWithTag("Station").GetComponent<ChargingAreaScript>();
+
+        timer = 0f;
     }
     private void Update()
     {
+        timer += Time.deltaTime;
+        
         if (station == null) return;
 
         float distance = Vector3.Distance(transform.position, station.transform.position);
-        if (distance <= attackRange && !isAttacking)
+        if (distance <= attackRange && !isAttacking && timer > attackCD)
         {
-            StartCoroutine(AttackLoop());
+            Attack();
+            timer = 0f;
         }
     }
 
-    private IEnumerator AttackLoop()
+    void Attack()
     {
-        isAttacking = true;
-
-        while (true)
-        {
-            OnAttack?.Invoke(this, EventArgs.Empty);
-
-            yield return new WaitForSeconds(attackCD);
-            isAttacking = false;
-        }
+        chargingAreaScript.TakeDamage(EnemyDamage);
     }
+
 }
